@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Stock } from '../../model/stock';
-import { StockService } from '../../services/stock.service';
 
 @Component({
   selector: 'app-stock-item',
@@ -9,20 +8,20 @@ import { StockService } from '../../services/stock.service';
 })
 export class StockItemComponent implements OnInit {
   @Input() public stock: Stock;
-
-  constructor(private stockService: StockService) {}
+  @Output() private toggleFavourite: EventEmitter<Stock>;
+  @Output() private editStockEvent: EventEmitter<Stock>;
+  constructor() {
+    this.toggleFavourite = new EventEmitter<Stock>();
+  }
 
   ngOnInit() { }
 
-  isPositiveChange() {
-    return this.stock ? this.stock.price > this.stock.previousPrice : false;
+  onToggleFavourite() {
+    this.toggleFavourite.emit(this.stock);
   }
 
-  onToggleFavourite() {
-    this.stockService.toggleFavorite(this.stock)
-      .subscribe((stock) => {
-        this.stock.favourite = !this.stock.favourite;
-      });
+  editStock(){
+    this.editStockEvent.emit(this.stock);
   }
 
 }

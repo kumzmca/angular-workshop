@@ -1,65 +1,47 @@
 <h2>Create Stock Form</h2>
-<div *ngIf="message">{{message}}</div>
 <div class="form-group">
-  <form (submit)="createStock(stockForm)" #stockForm="ngForm">
+  <form (submit)="createStock()" #form="ngForm">
     <div class="stock-name">
       <input type="text"
-             placeholder="Stock Name"
-             name="stockName"
-             required
-             #stockName="ngModel"
-             [(ngModel)]="stock.name">
-    </div>
-    <div *ngIf="stockName.invalid && stockName.errors.required">
-      Stock Name is Mandatory
+        [(ngModel)]="stock.name"
+        placeholder="Stock Name"
+             name="stockName">
     </div>
     <div class="stock-code">
-      <input type="text"
-             placeholder="Stock Code"
-             name="stockCode"
-             required
-             minlength="2"
-             #stockCode="ngModel"
-             [(ngModel)]="stock.code">
+      <input #smode="ngModel" required minlength="3" type="text" placeholder="Stock Code"
+      [(ngModel)]="stock.code"
+             name="stockCode">
     </div>
-    <div *ngIf="stockCode.dirty && stockCode.invalid">
-      <div *ngIf="stockCode.errors.required">
-        Stock Code is Mandatory
-      </div>
-      <div *ngIf="stockCode.errors.minlength">
-        Stock Code should be atleast two characters
-      </div>
-    </div>
+    <span *ngIf="smode.dirty && smode.invalid && smode.errors.required">
+        requried
+    </span>
+    <span *ngIf="smode.dirty && smode.invalid && smode.errors.minlength">
+      stock code need min 3 char please :()
+    </span>
+    
     <div class="stock-price">
       <input type="number" placeholder="Stock Price"
-             name="stockPrice"
-             [ngModel]="stock.price"
-             (ngModelChange)="onPriceChange($event)">
+        [ngModel]="stock.price"
+        (ngModelChange)="updatePrice($event)"
+             name="stockPrice">
     </div>
     <div class="stock-exchange">
       <div>
-        <input type="radio"
-               name="stockExchange"
-               value="NYSE"
-               [(ngModel)]="stock.exchange">NYSE
+        <input type="radio" [(ngModel)]="stock.exchange" name="stockExchange" value="NYSE">NYSE
       </div>
       <div>
-        <input type="radio"
-               name="stockExchange"
-               value="NASDAQ"
-               [(ngModel)]="stock.exchange">NASDAQ
+        <input type="radio"  [(ngModel)]="stock.exchange" name="stockExchange" value="NASDAQ">NASDAQ
       </div>
       <div>
-        <input type="radio"
-               name="stockExchange"
-               value="OTHER"
-               [(ngModel)]="stock.exchange">OTHER
+        <input type="radio" [(ngModel)]="stock.exchange" name="stockExchange" value="OTHER">OTHER
       </div>
     </div>
     <div class="stock-confirm">
-      <input type="checkbox" name="stockConfirm" [(ngModel)]="confirmed">
+      <input type="checkbox" name="stockConfirm" [(ngModel)]="confirmed" >
       I confirm that the information provided above is accurate!
     </div>
-    <button [disabled]="!confirmed" type="submit">Create</button>
+    <button [hidden]='form.invalid' [disabled]="!confirmed" type="submit">Create</button>
   </form>
+  {{message }}
 </div>
+<h4>Stock Name is {{stock.name}}</h4>

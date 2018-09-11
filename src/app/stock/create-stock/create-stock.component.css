@@ -1,6 +1,11 @@
-input.ng-valid {
-  background-color: green;
+input.ng-pristine{
+    background:green;
 }
-input.ng-invalid {
-  background-color: pink;
+
+input.ng-dirty{
+    background:grey;
+} 
+
+input.ng-invalid.ng-dirty {
+    background:red;
 }

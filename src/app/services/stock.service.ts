@@ -1,32 +1,39 @@
 import { Injectable } from '@angular/core';
 import { Stock } from '../model/stock';
 
-import { Observable, of, throwError } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-
 @Injectable({
   providedIn: 'root'
 })
 export class StockService {
+  private stocks: Stock[];
 
-  constructor(private http: HttpClient) {}
-
-  getStocks(): Observable<Stock[]> {
-    return this.http.get<Stock[]>('/api/stock');
+  constructor() { 
+    this.stocks= [
+      new Stock('Test Stock Company', 'TSC', 85, 80, 'NASDAQ'),
+      new Stock('Second Stock Company', 'SSC', 10, 20, 'BSE'),
+      new Stock('Last Stock Company', 'LSC', 876, 765, 'NYSE')
+    ];
   }
 
-  getStock(code: string): Observable<Stock> {
-    return this.http.get<Stock>('/api/stock/' + code);
+  createStock(stock:Stock) {
+    let foundStock=this.stocks.find((each)=> each.code===stock.code);
+    console.log(foundStock);
+    if(foundStock) return false;
+
+    this.stocks.push(stock);
+    return true;
   }
 
-  createStock(stock: Stock): Observable<any> {
-    return this.http.post('/api/stock', stock);
+  getStocks(){
+    return this.stocks;
   }
 
-  toggleFavorite(stock: Stock): Observable<Stock> {
-    return this.http.patch<Stock>('/api/stock/' + stock.code, {
-      favorite: !stock.favourite
-    });
+  toggleFavourite(stock:Stock){
+    let foundStock=this.stocks.find((each)=> { return each.code===stock.code } );
+    console.log(foundStock);
+    if(foundStock) 
+      foundStock.favourite = !foundStock.favourite;
+
   }
 
 }
